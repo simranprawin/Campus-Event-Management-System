@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<section class="auth-container">
+  <div class="auth-card wide">
+    <p class="eyebrow dark">Student Account</p>
+    <h1>Create your account</h1>
+
+    <form method="POST" class="auth-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter your full name"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          minlength="6"
+          placeholder="Minimum 6 characters"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="department">Department</label>
+        <input
+          type="text"
+          id="department"
+          name="department"
+          placeholder="Example: Computer Science"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="year">Year of Study</label>
+        <select id="year" name="year" required>
+          <option value="">Select year</option>
+          <option value="1st Year">1st Year</option>
+          <option value="2nd Year">2nd Year</option>
+          <option value="3rd Year">3rd Year</option>
+          <option value="4th Year">4th Year</option>
+        </select>
+      </div>
+
+      <button type="submit" class="primary-button full-width">
+        Create Account
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Already have an account?
+      <a href="{{ url_for('login') }}">Login</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<section class="page-container">
+  <div class="dashboard-header">
+    <div>
+      <p class="eyebrow dark">Student Area</p>
+      <h1>Student Dashboard</h1>
+      <p>View and manage your event registrations.</p>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="primary-button">
+      Explore Events
+    </a>
+  </div>
+
+  <div class="profile-card">
+    <div class="profile-avatar">
+      {{ g.user['name'][0]|upper }}
+    </div>
+
+    <div>
+      <h2>{{ g.user['name'] }}</h2>
+      <p>{{ g.user['email'] }}</p>
+      <p>
+        {{ g.user['department'] }} |
+        {{ g.user['year'] }}
+      </p>
+    </div>
+  </div>
+
+  <section class="dashboard-section">
+    <div class="section-heading">
+      <h2>My Registered Events</h2>
+      <span class="event-count">
+        {{ registrations|length }} event{{ "" if registrations|length == 1 else "s" }}
+      </span>
+    </div>
+
+    <div class="event-grid">
+      {% for registration in registrations %}
+        <article class="event-card">
+          <span class="event-category">
+            {{ registration['category'] }}
+          </span>
+
+          <h3>{{ registration['name'] }}</h3>
+
+          <div class="event-info">
+            <p>📅 {{ registration['date'] }}</p>
+            <p>⏰ {{ registration['time'] }}</p>
+            <p>📍 {{ registration['venue'] }}</p>
+            <p>👤 {{ registration['organizer'] }}</p>
+          </div>
+
+          <form
+            method="POST"
+            action="{{
+              url_for(
+                'cancel_registration',
+                event_id=registration['event_id']
+              )
+            }}"
+            class="delete-form"
+          >
+            <button type="submit" class="danger-button full-width">
+              Cancel Registration
+            </button>
+          </form>
+        </article>
+      {% else %}
+        <div class="empty-state">
+          <h3>No registered events</h3>
+          <p>Explore events and register for one.</p>
+
+          <br />
+
+          <a href="{{ url_for('index') }}" class="primary-button">
+            Browse Events
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</section>
+{% endblock %}

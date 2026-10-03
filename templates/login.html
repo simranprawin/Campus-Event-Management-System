@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<section class="auth-container">
+  <div class="auth-card">
+    <p class="eyebrow dark">Welcome Back</p>
+    <h1>Login to your account</h1>
+
+    <form method="POST" class="auth-form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="primary-button full-width">
+        Login
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Do not have an account?
+      <a href="{{ url_for('register') }}">Create one</a>
+    </p>
+
+    <div class="demo-box">
+      <strong>Demo admin account</strong>
+      <p>Email: admin@example.com</p>
+      <p>Password: admin123</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

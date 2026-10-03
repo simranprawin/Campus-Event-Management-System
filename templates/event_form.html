@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="page-container form-page">
+  <div class="form-card">
+    <p class="eyebrow dark">Administration</p>
+    <h1>{{ page_title }}</h1>
+
+    <form method="POST" class="event-form">
+      <div class="form-group">
+        <label for="name">Event Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="{{ event['name'] if event else '' }}"
+          placeholder="Enter event name"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">Select category</option>
+
+          {% for category in [
+            'Workshop',
+            'Hackathon',
+            'Cultural',
+            'Tech',
+            'Sports',
+            'Seminar'
+          ] %}
+            <option
+              value="{{ category }}"
+              {% if event and event['category'] == category %}
+                selected
+              {% endif %}
+            >
+              {{ category }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input
+          type="date"
+          id="date"
+          name="date"
+          value="{{ event['date'] if event else '' }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="time">Time</label>
+        <input
+          type="time"
+          id="time"
+          name="time"
+          value="{{ event['time'] if event else '' }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="venue">Venue</label>
+        <input
+          type="text"
+          id="venue"
+          name="venue"
+          value="{{ event['venue'] if event else '' }}"
+          placeholder="Enter venue"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="capacity">Capacity</label>
+        <input
+          type="number"
+          id="capacity"
+          name="capacity"
+          min="1"
+          value="{{ event['capacity'] if event else '' }}"
+          placeholder="Enter capacity"
+          required
+        />
+      </div>
+
+      <div class="form-group full-width">
+        <label for="organizer">Organizer</label>
+        <input
+          type="text"
+          id="organizer"
+          name="organizer"
+          value="{{ event['organizer'] if event else '' }}"
+          placeholder="Enter organizer"
+          required
+        />
+      </div>
+
+      <div class="form-group full-width">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="6"
+          placeholder="Enter event description"
+          required
+        >{{ event['description'] if event else '' }}</textarea>
+      </div>
+
+      <div class="form-actions full-width">
+        <button type="submit" class="primary-button">
+          Save Event
+        </button>
+
+        <a
+          href="{{ url_for('admin_dashboard') }}"
+          class="secondary-button"
+        >
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

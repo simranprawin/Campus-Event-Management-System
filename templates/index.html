@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Campus Events{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">College Event Management System</p>
+
+    <h1>
+      Discover and join exciting campus events.
+    </h1>
+
+    <p class="hero-text">
+      Explore workshops, hackathons, seminars, cultural programs,
+      sports activities, and technology events.
+    </p>
+
+    <div class="hero-actions">
+      {% if g.user and g.user['role'] == 'student' %}
+        <a href="#event-list" class="primary-button">
+          Explore Events
+        </a>
+      {% elif not g.user %}
+        <a href="{{ url_for('register') }}" class="primary-button">
+          Join Now
+        </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="hero-icon">🎓</div>
+</section>
+
+<section class="page-container">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow dark">Event Directory</p>
+      <h2>Upcoming Events</h2>
+    </div>
+
+    <span class="event-count">
+      {{ events|length }} event{{ "" if events|length == 1 else "s" }}
+    </span>
+  </div>
+
+  <form method="GET" class="filter-form">
+    <input
+      type="search"
+      name="search"
+      value="{{ search }}"
+      placeholder="Search events..."
+    />
+
+    <select name="category">
+      <option value="">All Categories</option>
+
+      {% for category in categories %}
+        <option
+          value="{{ category['category'] }}"
+          {% if selected_category == category['category'] %}
+            selected
+          {% endif %}
+        >
+          {{ category['category'] }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="primary-button">
+      Search
+    </button>
+
+    <a href="{{ url_for('index') }}" class="secondary-button">
+      Reset
+    </a>
+  </form>
+
+  <div id="event-list" class="event-grid">
+    {% for event in events %}
+      <article class="event-card">
+        <span class="event-category">
+          {{ event['category'] }}
+        </span>
+
+        <h3>{{ event['name'] }}</h3>
+
+        <div class="event-info">
+          <p>📅 {{ event['date'] }}</p>
+          <p>⏰ {{ event['time'] }}</p>
+          <p>📍 {{ event['venue'] }}</p>
+          <p>👤 {{ event['organizer'] }}</p>
+        </div>
+
+        <p class="event-description">
+          {{ event['description'] }}
+        </p>
+
+        <div class="capacity-bar">
+          <div
+            class="capacity-progress"
+            style="width: {{
+              [((event['registration_count'] / event['capacity']) * 100), 100] | min
+            }}%"
+          ></div>
+        </div>
+
+        <p class="capacity-text">
+          {{ event['registration_count'] }} /
+          {{ event['capacity'] }} seats registered
+        </p>
+
+        <div class="event-actions">
+          {% if g.user and g.user['role'] == 'student' %}
+            {% if event['registration_count'] < event['capacity'] %}
+              <form
+                method="POST"
+                action="{{ url_for('register_for_event', event_id=event['id']) }}"
+              >
+                <button type="submit" class="success-button">
+                  Register
+                </button>
+              </form>
+            {% else %}
+              <button class="disabled-button" disabled>
+                Event Full
+              </button>
+            {% endif %}
+          {% elif not g.user %}
+            <a href="{{ url_for('login') }}" class="success-button">
+              Login to Register
+            </a>
+          {% endif %}
+        </div>
+      </article>
+    {% else %}
+      <div class="empty-state">
+        <h3>No events found</h3>
+        <p>Try another search or category.</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
